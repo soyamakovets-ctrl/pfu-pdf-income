@@ -47,8 +47,8 @@ if uploaded_file is not None:
             if str(y) not in yearly_data:
                 yearly_data[str(y)] = {"total_year": 0.0}
 
-        rows_main = [("Рік", "Сума за рік", "Після -7%")]
-        rows_7percent = [("Рік", "7% від суми")]
+        rows_main = [("Рік", "Сума за рік", "Після -30%")]
+        rows_30percent = [("Рік", "30% від суми")]
         rows_explain = [("Рік", "Як проводився розрахунок")]
 
         total_after_all_years = 0.0
@@ -58,14 +58,14 @@ if uploaded_file is not None:
             total_year = yearly_data[year]["total_year"]
             total_all_years += total_year
 
-            percent_7 = round(total_year * 0.07, 2)
-            after_7 = round(total_year * 0.93, 2)
+            percent_30 = round(total_year * 0.30, 2)
+            after_30 = round(total_year * 0.70, 2)
 
-            total_after_all_years += after_7
+            total_after_all_years += after_30
 
-            rows_main.append((year, round(total_year, 2), after_7))
-            rows_7percent.append((year, percent_7))
-            rows_explain.append((year, f"{round(total_year, 2)} грн - 7% = {after_7} грн"))
+            rows_main.append((year, round(total_year, 2), after_30))
+            rows_30percent.append((year, percent_30))
+            rows_explain.append((year, f"{round(total_year, 2)} грн - 30% = {after_30} грн"))
 
         rows_main.append(("Усього", round(total_all_years, 2), round(total_after_all_years, 2)))
 
@@ -79,7 +79,7 @@ if uploaded_file is not None:
             unsafe_allow_html=True,
         )
 
-        st.write(f"Сума після вирахування 7% за всі роки: **{round(total_after_all_years, 2)} грн**")
+        st.write(f"Сума після вирахування 30% за всі роки: **{round(total_after_all_years, 2)} грн**")
 
         doc_type = "ОК-?"
 
@@ -104,7 +104,7 @@ if uploaded_file is not None:
         copy_text = (
             f"Надано {doc_type} за період {year_range}; "
             f"загальна сума {total_copy_sum} грн; "
-            f"з урахуванням 7% {total_after_copy} грн"
+            f"з урахуванням 30% {total_after_copy} грн"
         )
 
         st.markdown("📎 **Коментар для фіксації документу:**")
@@ -136,11 +136,11 @@ if uploaded_file is not None:
             </div>
         """, height=150)
 
-        show_extra = st.checkbox("📊 Показати пояснення розрахунку 7%")
+        show_extra = st.checkbox("📊 Показати пояснення розрахунку 30%")
 
         if show_extra:
             st.subheader("🔢 Пояснення розрахунку")
             st.table(rows_explain)
 
-            st.subheader("📉 7% від кожного року")
-            st.table(rows_7percent)
+            st.subheader("📉 30% від кожного року")
+            st.table(rows_30percent)
